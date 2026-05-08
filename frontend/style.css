@@ -1,0 +1,41 @@
+
+body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
+
+.slots-wrapper { width: 250px; display: flex; flex-direction: column; gap: 15px; }
+
+.slot-box { 
+    border: 1px solid #555; 
+    padding: 10px; 
+    text-align: center; 
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.modal { 
+    display: none; 
+    position: fixed; 
+    top: 50px; 
+    left: 300px; 
+    border: 2px dashed #999; 
+    padding: 20px; 
+    background: #fff; 
+    border-radius: 8px;
+}
+
+.meeting-grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+
+.meeting-card { 
+    border: 1px solid #ccc; 
+    padding: 15px; 
+    width: 280px; 
+    background: #fafafa;
+}
+
+.cancel-btn { 
+    background-color: #008cba; 
+    color: white; 
+    border: none; 
+    padding: 8px 15px; 
+    margin-top: 10px; 
+    cursor: pointer; 
+}

@@ -1,0 +1,77 @@
+const apiURL = "http://localhost:4000/api";
+let selectedSlotId = null;
+
+// Page load hone par data lao
+window.addEventListener('DOMContentLoaded', () => {
+    loadSlots();
+    loadMeetings();
+});
+
+// 1. Slots load karna
+async function loadSlots() {
+    try {
+        const res = await axios.get(`${apiURL}/slots`);
+        const container = document.getElementById('slotsContainer');
+
+        container.innerHTML = res.data.map(slot => `
+            <div class="slot-box" onclick="openBooking(${slot.id})">
+                <strong>${slot.time}</strong><br>
+                <span>${slot.available} Available</span>
+            </div>
+        `).join(''); //
+    } catch (err) { console.log("Error loading slots"); }
+}
+
+// 2. Booking Form kholna
+function openBooking(id) {
+    selectedSlotId = id;
+    document.getElementById('bookingModal').style.display = 'block'; //
+}
+
+// 3. Meeting book karna
+document.getElementById('bookBtn').addEventListener('click', async () => {
+    const name = document.getElementById('nameInput').value;
+    const email = document.getElementById('emailInput').value;
+
+    if(!name || !email) return alert("Please fill details!");
+
+    try {
+        await axios.post(`${apiURL}/book`, { 
+            slotId: selectedSlotId, 
+            name: name, 
+            email: email 
+        });
+        
+        alert(`Slot confirmed ${name}!`); //
+        document.getElementById('bookingModal').style.display = 'none';
+        loadSlots(); // Update availability (4 to 3)
+        loadMeetings(); // Update meeting list
+    } catch (err) { alert("Booking failed!"); }
+});
+
+// 4. Scheduled meetings dikhana
+async function loadMeetings() {
+    try {
+        const res = await axios.get(`${apiURL}/meetings`);
+        const container = document.getElementById('meetingList');
+
+        container.innerHTML = res.data.map(m => `
+          
+            <div class="meeting-card">
+                <p>Hi ${m.userName},</p>
+                <p>Please join the meeting via this link at ${m.slotTime}.</p>
+                <button class="cancel-btn" onclick="cancelMeeting(${m.id}, ${m.slotId})">Cancel</button>
+            </div>
+
+        `).join(''); //
+    } catch (err) { console.log("Error loading meetings"); }
+}
+
+// 5. Cancel logic
+async function cancelMeeting(id, slotId) {
+    try {
+        await axios.post(`${apiURL}/cancel`, { id, slotId });
+        loadSlots(); // Availability wapas badhayega (+1)
+        loadMeetings();
+    } catch (err) { alert("Cancel error!"); }
+}
