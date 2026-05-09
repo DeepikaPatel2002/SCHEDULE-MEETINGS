@@ -1,7 +1,7 @@
 const apiURL = "http://localhost:4000/api";
 let selectedSlotId = null;
 
-// Page load hone par data lao
+// Page load hone par data show
 window.addEventListener('DOMContentLoaded', () => {
     loadSlots();
     loadMeetings();
@@ -18,20 +18,22 @@ async function loadSlots() {
                 <strong>${slot.time}</strong><br>
                 <span>${slot.available} Available</span>
             </div>
-        `).join(''); //
+        `).join(''); 
     } catch (err) { console.log("Error loading slots"); }
 }
 
 // 2. Booking Form kholna
 function openBooking(id) {
     selectedSlotId = id;
-    document.getElementById('bookingModal').style.display = 'block'; //
+    document.getElementById('bookingModal').style.display = 'block'; 
 }
 
 // 3. Meeting book karna
 document.getElementById('bookBtn').addEventListener('click', async () => {
+
     const name = document.getElementById('nameInput').value;
     const email = document.getElementById('emailInput').value;
+    const link = document.getElementById('linkInput').value;
 
     if(!name || !email) return alert("Please fill details!");
 
@@ -39,10 +41,11 @@ document.getElementById('bookBtn').addEventListener('click', async () => {
         await axios.post(`${apiURL}/book`, { 
             slotId: selectedSlotId, 
             name: name, 
-            email: email 
+            email: email,
+            meetingLink:link
         });
         
-        alert(`Slot confirmed ${name}!`); //
+        alert(`Slot confirmed ${name}!`); 
         document.getElementById('bookingModal').style.display = 'none';
         loadSlots(); // Update availability (4 to 3)
         loadMeetings(); // Update meeting list
@@ -59,7 +62,8 @@ async function loadMeetings() {
           
             <div class="meeting-card">
                 <p>Hi ${m.userName},</p>
-                <p>Please join the meeting via this link at ${m.slotTime}.</p>
+            
+                <p>Join here:<a href="${m.meetingLink}" target="_blank">${m.meetingLink}</a></p>
                 <button class="cancel-btn" onclick="cancelMeeting(${m.id}, ${m.slotId})">Cancel</button>
             </div>
 

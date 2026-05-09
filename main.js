@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 app.use('/api', meetingRoutes);
 
-sequelize.sync().then(async () => {
+sequelize.sync({alter:true}).then(async () => {
     // Agar slots table khali hai, toh default slots bhar do
     const count = await Slot.count();
     if (count === 0) {

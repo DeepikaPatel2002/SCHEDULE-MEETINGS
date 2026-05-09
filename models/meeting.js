@@ -21,10 +21,10 @@ const Meeting = sequelize.define('meeting', {
         allowNull: false
      },
      
-    //  meetingLink:{
-    //     type:Sequelize.STRING,
-    //     allowNull:true
-    //  }
+     meetingLink:{
+        type:DataTypes.STRING,
+        allowNull:false
+     }
 
     
 });
