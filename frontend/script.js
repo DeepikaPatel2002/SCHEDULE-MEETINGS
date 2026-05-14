@@ -67,7 +67,7 @@ async function loadMeetings() {
                 <button class="cancel-btn" onclick="cancelMeeting(${m.id}, ${m.slotId})">Cancel</button>
             </div>
 
-        `).join(''); //
+        `).join(''); 
     } catch (err) { console.log("Error loading meetings"); }
 }
 

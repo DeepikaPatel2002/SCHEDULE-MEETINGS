@@ -4,14 +4,14 @@ const Meeting = require('../models/meeting');
 
 exports.getSlots = async (req, res) => {
     try {
-        const slots = await Slot.findAll();
+        const slots = await Slot.findAll({include:Meeting});
         res.json(slots);
     } catch (err) { res.status(500).json(err); }
 };
 
 exports.getMeetings = async (req, res) => {
     try {
-        const meetings = await Meeting.findAll();
+        const meetings = await Meeting.findAll({include:Slot});
         res.json(meetings);
     } catch (err) { res.status(500).json(err); }
 };
