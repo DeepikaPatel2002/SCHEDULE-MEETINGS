@@ -6,14 +6,20 @@ exports.getSlots = async (req, res) => {
     try {
         const slots = await Slot.findAll({include:Meeting});
         res.json(slots);
-    } catch (err) { res.status(500).json(err); }
+    }
+     catch (err) { 
+        res.status(500).json(err);
+     }
 };
 
 exports.getMeetings = async (req, res) => {
     try {
         const meetings = await Meeting.findAll({include:Slot});
         res.json(meetings);
-    } catch (err) { res.status(500).json(err); }
+    } 
+    catch (err) { 
+        res.status(500).json(err); 
+    }
 };
 
 exports.bookMeeting = async (req, res) => {
@@ -33,7 +39,10 @@ exports.bookMeeting = async (req, res) => {
         } else {
             res.status(400).json({ message: "No slots left!" });
         }
-    } catch (err) { res.status(500).json(err); }
+    } 
+    catch (err) { 
+        res.status(500).json(err);
+     }
 };
 
 exports.cancelMeeting = async (req, res) => {
@@ -43,5 +52,8 @@ exports.cancelMeeting = async (req, res) => {
         await slot.update({ available: slot.available + 1 }); 
         await Meeting.destroy({ where: { id: id } });
         res.json({ message: "Deleted" });
-    } catch (err) { res.status(500).json(err); }
+    } 
+    catch (err) { 
+        res.status(500).json(err);
+     }
 };

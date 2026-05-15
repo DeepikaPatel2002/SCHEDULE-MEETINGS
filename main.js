@@ -1,27 +1,23 @@
 
 const express = require('express');
-const bodyParser = require('body-parser');
+
 const cors = require('cors');
 
 const sequelize = require('./utils/db-connection');
 
 const meetingRoutes = require('./routes/meetingRoutes');
 
-// const Slot = require('./models/slot');
-
-// const Meeting = require('./models/meeting');
-
 const { Slot, Meeting } = require('./models/index');
 
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use('/api', meetingRoutes);
 
 sequelize.sync({force:false}).then(async () => {
-    // Agar slots table khali hai, toh default slots bhar do
+    
     const count = await Slot.count();
     if (count === 0) {
         await Slot.bulkCreate([

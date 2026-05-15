@@ -19,7 +19,10 @@ async function loadSlots() {
                 <span>${slot.available} Available</span>
             </div>
         `).join(''); 
-    } catch (err) { console.log("Error loading slots"); }
+    } 
+    catch (err) { 
+        console.log("Error loading slots");
+     }
 }
 
 // 2. Booking Form kholna
@@ -35,7 +38,8 @@ document.getElementById('bookBtn').addEventListener('click', async () => {
     const email = document.getElementById('emailInput').value;
     const link = document.getElementById('linkInput').value;
 
-    if(!name || !email) return alert("Please fill details!");
+    if(!name || !email) 
+        return alert("Please fill details!");
 
     try {
         await axios.post(`${apiURL}/book`, { 
@@ -47,9 +51,12 @@ document.getElementById('bookBtn').addEventListener('click', async () => {
         
         alert(`Slot confirmed ${name}!`); 
         document.getElementById('bookingModal').style.display = 'none';
-        loadSlots(); // Update availability (4 to 3)
-        loadMeetings(); // Update meeting list
-    } catch (err) { alert("Booking failed!"); }
+        loadSlots(); 
+        loadMeetings(); 
+    } 
+    catch (err) { 
+        alert("Booking failed!"); 
+    }
 });
 
 // 4. Scheduled meetings dikhana
@@ -68,14 +75,20 @@ async function loadMeetings() {
             </div>
 
         `).join(''); 
-    } catch (err) { console.log("Error loading meetings"); }
+
+    }
+     catch (err) {
+         console.log("Error loading meetings");
+         }
 }
 
 // 5. Cancel logic
 async function cancelMeeting(id, slotId) {
     try {
-        await axios.post(`${apiURL}/cancel`, { id, slotId });
-        loadSlots(); // Availability wapas badhayega (+1)
+        await axios.delete(`${apiURL}/cancel/${id}/${slotId}`);
+        loadSlots(); 
         loadMeetings();
-    } catch (err) { alert("Cancel error!"); }
+    } catch (err) { 
+        alert("Cancel error!"); 
+    }
 }
