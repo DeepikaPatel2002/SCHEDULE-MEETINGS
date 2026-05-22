@@ -46,14 +46,17 @@ exports.bookMeeting = async (req, res) => {
 };
 
 exports.cancelMeeting = async (req, res) => {
-    const { id, slotId } = req.body;
+    const { id, slotId } = req.params; 
     try {
         const slot = await Slot.findByPk(slotId);
-        await slot.update({ available: slot.available + 1 }); 
-        await Meeting.destroy({ where: { id: id } });
+        if (!slot) return res.status(404).json({ message: "Slot not found" });
+
+        await slot.update({ available: slot.available + 1 });
+        await Meeting.destroy({ where: { id } });
+
         res.json({ message: "Deleted" });
-    } 
-    catch (err) { 
+    } catch (err) {
         res.status(500).json(err);
-     }
+    }
 };
+
